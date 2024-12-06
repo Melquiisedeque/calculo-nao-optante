@@ -1,18 +1,21 @@
-# Ignorar arquivos e pastas do PyCharm
-.idea/
-
-# Ignorar arquivos Python compilados
-__pycache__/
-*.pyc
-
-# Ignorar ambientes virtuais
+# Ambiente virtual
 venv/
 .venv/
 
-# Arquivos temporários ou de sistema
+# Arquivos de configuração do PyCharm
+.idea/
+
+# Arquivos Python compilados
+__pycache__/
+*.pyc
+
+# Logs e arquivos temporários
 *.log
 *.tmp
+*.swp
+
+# Arquivos do sistema
 .DS_Store
 
-# Arquivos de cache do sistema
-*.swp
+# Configuração de ambiente local
+.env
