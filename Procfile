@@ -1,1 +1,1 @@
-web: python calculo.py
+web: gunicorn --bind 0.0.0.0:$PORT calculo:app
