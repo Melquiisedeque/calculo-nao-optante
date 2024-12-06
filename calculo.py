@@ -1,10 +1,6 @@
 from flask import Flask, request, jsonify
 import re
 from datetime import datetime
-import locale
-
-# Configurar o locale para formato brasileiro
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 app = Flask(__name__)
 
@@ -47,6 +43,12 @@ def calcular_valor_fgts(saldo_fgts, mes_aniversario):
     valor_proporcional = (valor_base / 1000) * saldo_fgts
     return round(valor_proporcional, 2)
 
+def formatar_valor(valor):
+    """
+    Formata um número no estilo brasileiro, com separador de milhar e decimal.
+    """
+    return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 @app.route('/calcular_fgts', methods=['POST'])
 def calcular_fgts():
     try:
@@ -64,8 +66,8 @@ def calcular_fgts():
         valor_liberado = calcular_valor_fgts(saldo_fgts, mes_aniversario)
 
         # Formatar os valores no formato brasileiro
-        saldo_formatado = locale.format_string("%.2f", saldo_fgts, grouping=True).replace('.', ',')
-        valor_liberado_formatado = locale.format_string("%.2f", valor_liberado, grouping=True).replace('.', ',')
+        saldo_formatado = formatar_valor(saldo_fgts)
+        valor_liberado_formatado = formatar_valor(valor_liberado)
 
         return jsonify({
             "saldo_fgts": saldo_formatado,
