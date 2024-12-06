@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import os
 
 app = Flask(__name__)
 
@@ -12,7 +13,6 @@ def interpretar_valor(valor_texto):
         valor_texto = valor_texto.strip()
         valor_texto = valor_texto.replace(',', '.')  # Substituir vírgulas por pontos
         valor_texto = valor_texto.replace('.', '', valor_texto.count('.') - 1)  # Remover separadores de milhar
-
         return float(valor_texto)
     except ValueError:
         raise ValueError("Digite somente números no formato válido, como: 1000,00 ou 1000.00")
@@ -47,7 +47,8 @@ def calcular_valor_fgts(saldo_fgts, mes_aniversario):
 @app.route('/calcular_fgts', methods=['POST'])
 def calcular_fgts():
     try:
-        data = request.json
+        # Obter o JSON da requisição
+        data = request.get_json()
         if not data:
             return jsonify({"erro": "Requisição inválida. Certifique-se de enviar um JSON válido."}), 400
 
@@ -57,12 +58,15 @@ def calcular_fgts():
         if not saldo or not mes_aniversario:
             return jsonify({"erro": "Os campos 'saldo_fgts' e 'mes_aniversario' são obrigatórios."}), 400
 
+        # Interpretar o saldo e validar o mês
         saldo_fgts = interpretar_valor(str(saldo))
         if len(mes_aniversario) != 2 or not mes_aniversario.isdigit() or not (1 <= int(mes_aniversario) <= 12):
             return jsonify({"erro": "Mês inválido! Digite no formato MM (01-12)."}), 400
 
+        # Calcular o valor liberado
         valor_liberado = calcular_valor_fgts(saldo_fgts, mes_aniversario)
 
+        # Retornar a resposta
         return jsonify({
             "saldo_fgts": saldo_fgts,
             "mes_aniversario": mes_aniversario,
@@ -74,7 +78,6 @@ def calcular_fgts():
         return jsonify({"erro": "Erro interno do servidor.", "detalhes": str(e)}), 500
 
 if __name__ == '__main__':
-    # Use a porta fornecida pelo Railway, com fallback para 5000
-    import os
-    port = int(os.environ.get("PORT", 5000))
+    # Configurar a porta para uso no Railway
+    port = int(os.environ.get("PORT", 8080))  # Use a porta definida pelo Railway ou 8080 como padrão
     app.run(host='0.0.0.0', port=port)
