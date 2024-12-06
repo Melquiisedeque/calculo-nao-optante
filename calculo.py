@@ -11,8 +11,8 @@ def interpretar_valor(valor_texto):
     """
     try:
         valor_texto = valor_texto.strip()
-        valor_texto = valor_texto.replace(',', '.')
-        valor_texto = valor_texto.replace('.', '', valor_texto.count('.') - 1)
+        valor_texto = valor_texto.replace(',', '.')  # Substitui vírgula por ponto para decimais
+        valor_texto = valor_texto.replace('.', '', valor_texto.count('.') - 1)  # Remove separadores de milhar
         return float(valor_texto)
     except ValueError:
         raise ValueError("Digite somente números no formato válido, como: 1000,00 ou 1000.00")
