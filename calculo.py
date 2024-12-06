@@ -79,4 +79,5 @@ def calcular_fgts():
         return jsonify({"erro": "Erro interno do servidor.", "detalhes": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5004)
+    app.run(host='0.0.0.0', port=5004, debug=True)
+
