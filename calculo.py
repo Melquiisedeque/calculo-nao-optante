@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import re
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
@@ -80,4 +81,5 @@ def calcular_fgts():
         return jsonify({"erro": "Erro interno do servidor.", "detalhes": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5004)
+    port = int(os.environ.get("PORT", 5004))
+    app.run(host='0.0.0.0', port=port)
