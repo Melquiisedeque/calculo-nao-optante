@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import os
 
 app = Flask(__name__)
 
@@ -78,6 +77,6 @@ def calcular_fgts():
         return jsonify({"erro": "Erro interno do servidor.", "detalhes": str(e)}), 500
 
 if __name__ == '__main__':
-    # Configurar a porta para uso no Railway
-    port = int(os.environ.get("PORT", 8080))  # Use a porta definida pelo Railway ou 8080 como padrão
+    # Configurar a porta fixa como 5004 para o Railway
+    port = 5004
     app.run(host='0.0.0.0', port=port)
